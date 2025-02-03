@@ -37,6 +37,8 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
+// Hash the password before saving only if it's newly created or modified,  
+// preventing re-hashing when updating other fields.
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
   this.password = await bcrypt.hash(this.password, 10);
