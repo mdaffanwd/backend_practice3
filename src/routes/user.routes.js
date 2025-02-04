@@ -1,8 +1,10 @@
 import { Router } from 'express';
-import registerUser from '../controllers/user.controller.js';
+import registerUser, { logoutUser } from '../controllers/user.controller.js';
 import upload from '../middlewares/multer.middlewares.js';
-
+import verifyJWT from '../middlewares/auth.middlewares.js'
+logoutUser
 const router = Router();
+
 
 router.route('/register').post(
   upload.fields([
@@ -17,5 +19,8 @@ router.route('/register').post(
   ]), // for handling avatar, cover, and other files. especially images.
   registerUser
 );
+
+// secured routes
+router.route("/logout",).post(verifyJWT, logoutUser)
 
 export default router;

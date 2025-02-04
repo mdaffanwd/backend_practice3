@@ -8,6 +8,7 @@ import {
 import ApiResponse from '../utils/ApiResponse.js';
 
 import jwt from 'jsonwebtoken';
+import cookieParser from 'cookie-parser';
 
 const registerUser = asyncHandler(async (req, res) => {
   // code to register a user
@@ -221,9 +222,40 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
         )
       );
   } catch (error) {
-    throw new ApiError(500, "Something went wrong while refreshing access token")
+    throw new ApiError(
+      500,
+      'Something went wrong while refreshing access token'
+    );
   }
 });
 
-export { generateAccessAndRefreshToken, loginUser };
+const logoutUser = asyncHandler(async (req, res) => {
+  await User.findByIdAndUpdate(
+    // TODO: need to come back here after middleware/
+    req.user._id,
+    {
+      $set: {
+        refreshToken: undefined,
+      },
+    },
+    { new: true }
+  );
+
+  const options = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+  };
+
+  return res
+    .status(200)
+    .clearCookie('accessToken', options)
+    .clearCookie('refreshToken', options);
+});
+
+export {
+  generateAccessAndRefreshToken,
+  loginUser,
+  refreshAccessToken,
+  logoutUser,
+};
 export default registerUser;
