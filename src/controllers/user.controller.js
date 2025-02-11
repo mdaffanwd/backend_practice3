@@ -465,7 +465,9 @@ export {
   refreshAccessToken,
   logoutUser,
   changeCurrentPassword,
-  getCurrentUser, updateAccountDetails, updateUserAvatar, updateUserCoverImage
+  getCurrentUser, updateAccountDetails, updateUserAvatar, updateUserCoverImage,
+  getUserChannelProfile,
+  getWatchHistory
 };
 
 export default registerUser;
