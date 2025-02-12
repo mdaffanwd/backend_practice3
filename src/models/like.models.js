@@ -20,6 +20,5 @@ const likeSchema = new Schema({
   },
 });
 
-const Like = model('Like', likeSchema);
+export const Like = model('Like', likeSchema);
 
-export default Like;
